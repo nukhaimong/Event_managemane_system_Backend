@@ -24,6 +24,7 @@ func (s *service) CreateUser(req dto.CreateRequest) (*dto.Response, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	err = s.repo.CreateUser(&user)
 	if err != nil {
 		return nil, err

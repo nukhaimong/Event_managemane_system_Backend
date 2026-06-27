@@ -5,6 +5,7 @@ import (
 	"gotickets/internal/event/dto"
 	httpresponse "gotickets/internal/httpResponse"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v5"
 )
@@ -63,4 +64,20 @@ func (h *handler) GetEvents(c *echo.Context) error {
 		return eventErrorResponse(c, err)
 	}
 	return c.JSON(http.StatusOK, events)
+}
+
+func (h *handler) GetEventById(c *echo.Context) error {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, httpresponse.Error{
+			Code:    http.StatusBadRequest,
+			Message: "Ivalid event id",
+			Details: err.Error(),
+		})
+	}
+	event, err := h.service.GetEventById(uint(id))
+	if err != nil {
+		return eventErrorResponse(c, err)
+	}
+	return c.JSON(http.StatusOK, event)
 }

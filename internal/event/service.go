@@ -1,6 +1,8 @@
 package event
 
-import "gotickets/internal/event/dto"
+import (
+	"gotickets/internal/event/dto"
+)
 
 type service struct {
 	repo Repository
@@ -40,4 +42,13 @@ func (s *service) GetEvents() ([]*dto.Response, error) {
 		responses[i] = event.ToResponse()
 	}
 	return responses, nil
+}
+
+func (s *service) GetEventById(eventId uint) (*dto.Response, error) {
+
+	event, err := s.repo.GetEventByID(eventId)
+	if err != nil {
+		return nil, err
+	}
+	return event.ToResponse(), nil
 }

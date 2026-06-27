@@ -11,6 +11,7 @@ var ErrEventNotFound = errors.New("Event not found")
 type Repository interface {
 	Create(event *Event) error
 	GetAll() ([]*Event, error)
+	GetEventByID(eventId uint) (*Event, error)
 }
 
 type respository struct {
@@ -35,4 +36,18 @@ func (r *respository) GetAll() ([]*Event, error) {
 		return nil, err
 	}
 	return events, nil
+}
+
+func (r *respository) GetEventByID(eventId uint) (*Event, error) {
+	event := &Event{}
+
+	err := r.db.First(event, eventId).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+
+			return nil, ErrEventNotFound
+		}
+		return nil, err
+	}
+	return event, nil
 }

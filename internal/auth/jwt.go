@@ -31,6 +31,7 @@ type jwtService struct {
 
 func NewJWTService(secretKey string) JWTService {
 	if secretKey == "" {
+		fmt.Println("JWT secret key is empty using default secret key")
 		secretKey = jwtSecretKey
 	}
 	return &jwtService{

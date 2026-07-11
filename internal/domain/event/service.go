@@ -138,3 +138,15 @@ func (s *service) UpdateEvent(eventId uint, userId uint, req *dto.UpdateRequest)
 
 	return event.ToResponse(), nil
 }
+
+func (s *service) GetMyEvents(userId uint) ([]*dto.Response, error) {
+	events, err := s.repo.GetMyEvents(userId)
+	if err != nil {
+		return nil, err
+	}
+	response := make([]*dto.Response, len(events))
+	for i, event := range events {
+		response[i] = event.ToResponse()
+	}
+	return response, nil
+}

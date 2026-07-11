@@ -240,3 +240,19 @@ func (h *handler) UpdateEvent(c *echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, response)
 }
+
+func (h *handler) GetMyEvents(c *echo.Context) error {
+	userId, ok := utils.GetCurrentUserID(c)
+	if !ok {
+		return c.JSON(http.StatusUnauthorized, httpresponse.Error{
+			Code:    http.StatusUnauthorized,
+			Message: "Unauthorize",
+		})
+	}
+	events, err := h.service.GetMyEvents(userId)
+	if err != nil {
+		return eventErrorResponse(c, err)
+	}
+
+	return c.JSON(http.StatusOK, events)
+}
